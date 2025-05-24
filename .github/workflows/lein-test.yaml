@@ -1,14 +1,11 @@
+---
 name: lein_test
 
 on:
-  workflow_dispatch:
+  pull_request: {}
   push:
     branches:
       - main
-    paths: ['src/**','test/**']
-  pull_request:
-    types: [opened, reopened, edited, synchronize]
-    paths: ['src/**','test/**']
 
 jobs:
   run-lein-tests:
