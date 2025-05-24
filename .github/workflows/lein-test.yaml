@@ -42,3 +42,11 @@ jobs:
           lein version
           echo "Running tests"
           lein -U test
+
+  tests:
+    needs:
+      - run-lein-tests
+    runs-on: ubuntu-24.04
+    name: Test suite
+    steps:
+      - run: echo Test suite completed
