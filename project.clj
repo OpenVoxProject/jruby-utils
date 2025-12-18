@@ -1,11 +1,11 @@
-(defproject puppetlabs/jruby-utils "5.2.1-SNAPSHOT"
+(defproject org.openvoxproject/jruby-utils "5.2.1-SNAPSHOT"
   :description "A library for working with JRuby"
-  :url "https://github.com/puppetlabs/jruby-utils"
+  :url "https://github.com/openvoxproject/jruby-utils"
   :license {:name "Apache License, Version 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0"}
 
   :min-lein-version "2.9.1"
-  :parent-project {:coords [puppetlabs/clj-parent "7.2.3"]
+  :parent-project {:coords [org.openvoxproject/clj-parent "7.4.1-SNAPSHOT"]
                    :inherit [:managed-dependencies]}
 
   :pedantic? :abort
@@ -22,11 +22,11 @@
                  [prismatic/schema]
                  [slingshot]
 
-                 [puppetlabs/jruby-deps "9.4.8.0-1"]
+                 [org.openvoxproject/jruby-deps "9.4.8.0-1-SNAPSHOT"]
 
                  [puppetlabs/i18n]
-                 [puppetlabs/kitchensink]
-                 [puppetlabs/trapperkeeper]
+                 [org.openvoxproject/kitchensink]
+                 [org.openvoxproject/trapperkeeper]
                  [puppetlabs/ring-middleware]]
 
   :deploy-repositories [["releases" {:url "https://clojars.org/repo"
