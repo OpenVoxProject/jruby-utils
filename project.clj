@@ -57,4 +57,4 @@
              :testutils {:source-paths ^:replace ["test/unit" "test/integration"]}}
 
   :plugins [[lein-parent "0.3.9"]
-            [org.openvoxproject/i18n "0.8.0" :hooks false]])
+            [org.openvoxproject/i18n "0.9.3-SNAPSHOT" :hooks false]])
