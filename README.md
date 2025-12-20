@@ -3,8 +3,6 @@
 A library for creating and interacting with a pool of JRuby instances in
 Clojure.
 
-[![Build Status](https://travis-ci.org/puppetlabs/jruby-utils.svg)](https://travis-ci.org/puppetlabs/jruby-utils)
-
 ## Usage
 
 This is a brief overview of the functionality of this library; TODO add more docs.
@@ -51,6 +49,4 @@ See [LICENSE](LICENSE).
 
 ## Support
 
-We use the [Trapperkeeper project on
-JIRA](https://tickets.puppetlabs.com/browse/TK) for tickets on this project,
-although Github issues are welcome too.
+GitHub issues and PRs are welcome! Additionally, drop us a line in [the Vox Pupuli Slack](https://voxpupuli.slack.com).
