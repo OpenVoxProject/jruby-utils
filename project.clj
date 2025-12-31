@@ -1,11 +1,11 @@
-(defproject puppetlabs/jruby-utils "5.2.1-SNAPSHOT"
+(defproject org.openvoxproject/jruby-utils "5.2.1-SNAPSHOT"
   :description "A library for working with JRuby"
-  :url "https://github.com/puppetlabs/jruby-utils"
+  :url "https://github.com/openvoxproject/jruby-utils"
   :license {:name "Apache License, Version 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0"}
 
   :min-lein-version "2.9.1"
-  :parent-project {:coords [puppetlabs/clj-parent "7.2.3"]
+  :parent-project {:coords [org.openvoxproject/clj-parent "7.5.1"]
                    :inherit [:managed-dependencies]}
 
   :pedantic? :abort
@@ -21,13 +21,14 @@
                  [clj-commons/fs]
                  [prismatic/schema]
                  [slingshot]
+                 [ring/ring-core]
 
-                 [puppetlabs/jruby-deps "9.4.8.0-1"]
+                 [org.openvoxproject/jruby-deps "9.4.8.0-3"]
 
-                 [puppetlabs/i18n]
-                 [puppetlabs/kitchensink]
-                 [puppetlabs/trapperkeeper]
-                 [puppetlabs/ring-middleware]]
+                 [org.openvoxproject/i18n]
+                 [org.openvoxproject/kitchensink]
+                 [org.openvoxproject/trapperkeeper]
+                 [org.openvoxproject/ring-middleware]]
 
   :deploy-repositories [["releases" {:url "https://clojars.org/repo"
                                      :username :env/clojars_jenkins_username
@@ -40,8 +41,8 @@
   ;; code that we have.
   :classifiers [["test" :testutils]]
 
-  :profiles {:dev {:dependencies  [[puppetlabs/kitchensink :classifier "test" :scope "test"]
-                                   [puppetlabs/trapperkeeper :classifier "test" :scope "test"]
+  :profiles {:dev {:dependencies  [[org.openvoxproject/kitchensink :classifier "test" :scope "test"]
+                                   [org.openvoxproject/trapperkeeper :classifier "test" :scope "test"]
                                    [org.bouncycastle/bcpkix-jdk18on]
                                    [org.tcrawley/dynapath]]
                    :jvm-opts ~(let [version (System/getProperty "java.specification.version")
@@ -51,10 +52,10 @@
                                    "-XX:+UseG1GC"
                                    "-Xms1G"
                                    "-Xmx2G"]
-                                  (if (= 17 (java.lang.Integer/parseInt major))
+                                  (if (>= 17 (java.lang.Integer/parseInt major))
                                     ["--add-opens" "java.base/sun.nio.ch=ALL-UNNAMED" "--add-opens" "java.base/java.io=ALL-UNNAMED"]
                                     [])))}
              :testutils {:source-paths ^:replace ["test/unit" "test/integration"]}}
 
   :plugins [[lein-parent "0.3.9"]
-            [puppetlabs/i18n "0.8.0" :hooks false]])
+            [org.openvoxproject/i18n "0.9.4" :hooks false]])
