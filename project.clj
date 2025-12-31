@@ -5,7 +5,7 @@
             :url "http://www.apache.org/licenses/LICENSE-2.0"}
 
   :min-lein-version "2.9.1"
-  :parent-project {:coords [org.openvoxproject/clj-parent "7.4.1-SNAPSHOT"]
+  :parent-project {:coords [org.openvoxproject/clj-parent "7.5.0"]
                    :inherit [:managed-dependencies]}
 
   :pedantic? :abort
@@ -22,7 +22,7 @@
                  [prismatic/schema]
                  [slingshot]
 
-                 [org.openvoxproject/jruby-deps "9.4.8.0-2-SNAPSHOT"]
+                 [org.openvoxproject/jruby-deps "9.4.8.0-2"]
 
                  [org.openvoxproject/i18n]
                  [org.openvoxproject/kitchensink]
@@ -57,4 +57,4 @@
              :testutils {:source-paths ^:replace ["test/unit" "test/integration"]}}
 
   :plugins [[lein-parent "0.3.9"]
-            [org.openvoxproject/i18n "0.9.3-SNAPSHOT" :hooks false]])
+            [org.openvoxproject/i18n "0.9.3" :hooks false]])
