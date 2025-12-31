@@ -1,4 +1,4 @@
-(defproject org.openvoxproject/jruby-utils "5.2.1-SNAPSHOT"
+(defproject org.openvoxproject/jruby-utils "5.2.1"
   :description "A library for working with JRuby"
   :url "https://github.com/openvoxproject/jruby-utils"
   :license {:name "Apache License, Version 2.0"
