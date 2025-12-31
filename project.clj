@@ -21,6 +21,7 @@
                  [clj-commons/fs]
                  [prismatic/schema]
                  [slingshot]
+                 [ring/ring-core]
 
                  [org.openvoxproject/jruby-deps "9.4.8.0-3"]
 
