@@ -5,7 +5,7 @@
             :url "http://www.apache.org/licenses/LICENSE-2.0"}
 
   :min-lein-version "2.9.1"
-  :parent-project {:coords [org.openvoxproject/clj-parent "7.6.3"]
+  :parent-project {:coords [org.openvoxproject/clj-parent "7.6.4"]
                    :inherit [:managed-dependencies]}
 
   :pedantic? :abort
@@ -23,7 +23,7 @@
                  [slingshot]
                  [ring/ring-core]
 
-                 [org.openvoxproject/jruby-deps "9.4.14.0-2"]
+                 [org.openvoxproject/jruby-deps "9.4.12.1-1"]
 
                  [org.openvoxproject/i18n]
                  [org.openvoxproject/kitchensink]
