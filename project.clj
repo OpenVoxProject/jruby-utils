@@ -28,7 +28,7 @@
                          [org.openvoxproject/trapperkeeper ~trapperkeeper-version :classifier "test"]]
 
   :dependencies [[org.clojure/clojure]
-                 [org.clojure/java.jmx "1.0.0"]
+                 [org.clojure/java.jmx "1.1.1"]
                  [org.clojure/tools.logging "1.3.1"]
 
                  [clj-commons/fs "1.6.312"]
