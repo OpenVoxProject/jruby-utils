@@ -2,7 +2,7 @@
 (def trapperkeeper-version "4.3.0")
 (def i18n-version "1.0.2")
 
-(defproject org.openvoxproject/jruby-utils "5.3.2-SNAPSHOT"
+(defproject org.openvoxproject/jruby-utils "5.3.2"
   :description "A library for working with JRuby"
   :url "https://github.com/openvoxproject/jruby-utils"
   :license {:name "Apache License, Version 2.0"
