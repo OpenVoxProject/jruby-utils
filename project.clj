@@ -29,7 +29,7 @@
 
   :dependencies [[org.clojure/clojure]
                  [org.clojure/java.jmx "1.0.0"]
-                 [org.clojure/tools.logging "1.2.4"]
+                 [org.clojure/tools.logging "1.3.1"]
 
                  [clj-commons/fs "1.6.312"]
                  [prismatic/schema "1.1.12"]
