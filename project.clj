@@ -5,7 +5,7 @@
             :url "http://www.apache.org/licenses/LICENSE-2.0"}
 
   :min-lein-version "2.9.1"
-  :parent-project {:coords [org.openvoxproject/clj-parent "7.6.4"]
+  :parent-project {:coords [org.openvoxproject/clj-parent "7.6.6"]
                    :inherit [:managed-dependencies]}
 
   :pedantic? :abort
