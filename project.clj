@@ -1,3 +1,7 @@
+(def kitchensink-version "3.5.3")
+(def trapperkeeper-version "4.3.0")
+(def i18n-version "1.0.2")
+
 (defproject org.openvoxproject/jruby-utils "5.3.2-SNAPSHOT"
   :description "A library for working with JRuby"
   :url "https://github.com/openvoxproject/jruby-utils"
@@ -5,8 +9,6 @@
             :url "http://www.apache.org/licenses/LICENSE-2.0"}
 
   :min-lein-version "2.9.1"
-  :parent-project {:coords [org.openvoxproject/clj-parent "7.6.4"]
-                   :inherit [:managed-dependencies]}
 
   :pedantic? :abort
 
@@ -14,21 +16,32 @@
   :java-source-paths ["src/java"]
   :test-paths ["test/unit" "test/integration"]
 
-  :dependencies [[org.clojure/clojure]
-                 [org.clojure/java.jmx]
-                 [org.clojure/tools.logging]
+  ;; These are to enforce consistent versions across dependencies of dependencies,
+  ;; and to avoid having to define versions in multiple places. If a component
+  ;; defined under :dependencies ends up causing an error due to :pedantic? :abort,
+  ;; because it is a dep of a dep with a different version, move it here.
+  :managed-dependencies [[org.clojure/clojure "1.12.4"]
+                         [commons-io "2.20.0"]
+                         [org.openvoxproject/kitchensink ~kitchensink-version]
+                         [org.openvoxproject/kitchensink ~kitchensink-version :classifier "test"]
+                         [org.openvoxproject/trapperkeeper ~trapperkeeper-version]
+                         [org.openvoxproject/trapperkeeper ~trapperkeeper-version :classifier "test"]]
 
-                 [clj-commons/fs]
-                 [prismatic/schema]
-                 [slingshot]
-                 [ring/ring-core]
+  :dependencies [[org.clojure/clojure]
+                 [org.clojure/java.jmx "1.0.0"]
+                 [org.clojure/tools.logging "1.2.4"]
+
+                 [clj-commons/fs "1.6.312"]
+                 [prismatic/schema "1.1.12"]
+                 [slingshot "0.12.2"]
+                 [ring/ring-core "1.8.2"]
 
                  [org.openvoxproject/jruby-deps "9.4.12.1-1"]
 
-                 [org.openvoxproject/i18n]
+                 [org.openvoxproject/i18n ~i18n-version]
                  [org.openvoxproject/kitchensink]
                  [org.openvoxproject/trapperkeeper]
-                 [org.openvoxproject/ring-middleware]]
+                 [org.openvoxproject/ring-middleware "2.1.0"]]
 
   :deploy-repositories [["releases" {:url "https://clojars.org/repo"
                                      :username :env/CLOJARS_USERNAME
@@ -43,8 +56,8 @@
 
   :profiles {:dev {:dependencies  [[org.openvoxproject/kitchensink :classifier "test" :scope "test"]
                                    [org.openvoxproject/trapperkeeper :classifier "test" :scope "test"]
-                                   [org.bouncycastle/bcpkix-jdk18on]
-                                   [org.tcrawley/dynapath]]
+                                   [org.bouncycastle/bcpkix-jdk18on "1.83"]
+                                   [org.tcrawley/dynapath "1.1.0"]]
                    :jvm-opts ~(let [version (System/getProperty "java.specification.version")
                                     [major minor _] (clojure.string/split version #"\.")]
                                 (concat
@@ -57,5 +70,4 @@
                                     [])))}
              :testutils {:source-paths ^:replace ["test/unit" "test/integration"]}}
 
-  :plugins [[lein-parent "0.3.9"]
-            [org.openvoxproject/i18n "1.0.2" :hooks false]])
+  :plugins [[org.openvoxproject/i18n ~i18n-version :hooks false]])
