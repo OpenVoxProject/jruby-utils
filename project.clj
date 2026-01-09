@@ -36,7 +36,7 @@
                  [slingshot "0.12.2"]
                  [ring/ring-core "1.15.3"]
 
-                 [org.openvoxproject/jruby-deps "9.4.12.1-1"]
+                 [org.openvoxproject/jruby-deps "9.4.14.0-2"]
 
                  [org.openvoxproject/i18n ~i18n-version]
                  [org.openvoxproject/kitchensink]
