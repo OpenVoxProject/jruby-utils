@@ -34,7 +34,7 @@
                  [clj-commons/fs "1.6.312"]
                  [prismatic/schema "1.1.12"]
                  [slingshot "0.12.2"]
-                 [ring/ring-core "1.8.2"]
+                 [ring/ring-core "1.15.3"]
 
                  [org.openvoxproject/jruby-deps "9.4.12.1-1"]
 
