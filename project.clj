@@ -42,7 +42,7 @@
                  [org.openvoxproject/i18n ~i18n-version]
                  [org.openvoxproject/kitchensink]
                  [org.openvoxproject/trapperkeeper]
-                 [org.openvoxproject/ring-middleware "2.1.1"]]
+                 [org.openvoxproject/ring-middleware "2.1.2"]]
 
   :deploy-repositories [["releases" {:url "https://clojars.org/repo"
                                      :username :env/CLOJARS_USERNAME
