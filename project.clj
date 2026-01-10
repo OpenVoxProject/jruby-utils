@@ -22,6 +22,7 @@
   ;; because it is a dep of a dep with a different version, move it here.
   :managed-dependencies [[org.clojure/clojure "1.12.4"]
                          [commons-io "2.21.0"]
+                         [commons-codec "1.20.0"]
                          [org.openvoxproject/kitchensink ~kitchensink-version]
                          [org.openvoxproject/kitchensink ~kitchensink-version :classifier "test"]
                          [org.openvoxproject/trapperkeeper ~trapperkeeper-version]
@@ -41,7 +42,7 @@
                  [org.openvoxproject/i18n ~i18n-version]
                  [org.openvoxproject/kitchensink]
                  [org.openvoxproject/trapperkeeper]
-                 [org.openvoxproject/ring-middleware "2.1.0"]]
+                 [org.openvoxproject/ring-middleware "2.1.1"]]
 
   :deploy-repositories [["releases" {:url "https://clojars.org/repo"
                                      :username :env/CLOJARS_USERNAME
