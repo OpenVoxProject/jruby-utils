@@ -1,5 +1,3 @@
-(def kitchensink-version "3.5.5")
-(def trapperkeeper-version "4.3.2")
 (def i18n-version "1.0.3")
 
 (defproject org.openvoxproject/jruby-utils "5.3.5-SNAPSHOT"
@@ -29,11 +27,11 @@
                          [org.bouncycastle/bcpkix-jdk18on "1.83"]
                          [org.openvoxproject/i18n ~i18n-version]
                          [org.openvoxproject/jruby-deps "9.4.12.1-1"]
-                         [org.openvoxproject/kitchensink ~kitchensink-version]
-                         [org.openvoxproject/kitchensink ~kitchensink-version :classifier "test"]
+                         [org.openvoxproject/kitchensink "3.5.5"]
+                         [org.openvoxproject/kitchensink "3.5.5" :classifier "test"]
                          [org.openvoxproject/ring-middleware "2.1.2"]
-                         [org.openvoxproject/trapperkeeper ~trapperkeeper-version]
-                         [org.openvoxproject/trapperkeeper ~trapperkeeper-version :classifier "test"]
+                         [org.openvoxproject/trapperkeeper "4.3.2"]
+                         [org.openvoxproject/trapperkeeper "4.3.2" :classifier "test"]
                          [org.tcrawley/dynapath "1.1.0"]
                          [ring/ring-core "1.15.3"]
                          [prismatic/schema "1.4.1"]
