@@ -16,33 +16,42 @@
   :java-source-paths ["src/java"]
   :test-paths ["test/unit" "test/integration"]
 
-  ;; These are to enforce consistent versions across dependencies of dependencies,
-  ;; and to avoid having to define versions in multiple places. If a component
-  ;; defined under :dependencies ends up causing an error due to :pedantic? :abort,
-  ;; because it is a dep of a dep with a different version, move it here.
+  ;; Generally, try to keep version pins in :managed-dependencies and the libraries
+  ;; this project actually uses in :dependencies, inheriting the version from
+  ;; :managed-dependencies. This prevents endless version conflicts due to deps of deps.
+  ;; Renovate should keep the versions largely in sync between projects.
   :managed-dependencies [[org.clojure/clojure "1.12.4"]
+                         [org.clojure/java.jmx "1.1.1"]
+                         [org.clojure/tools.logging "1.3.1"]
+                         [clj-commons/fs "1.6.312"]
                          [commons-io "2.21.0"]
                          [commons-codec "1.20.0"]
+                         [org.bouncycastle/bcpkix-jdk18on "1.83"]
+                         [org.openvoxproject/i18n ~i18n-version]
+                         [org.openvoxproject/jruby-deps "9.4.12.1-1"]
                          [org.openvoxproject/kitchensink ~kitchensink-version]
                          [org.openvoxproject/kitchensink ~kitchensink-version :classifier "test"]
+                         [org.openvoxproject/ring-middleware "2.1.2"]
                          [org.openvoxproject/trapperkeeper ~trapperkeeper-version]
-                         [org.openvoxproject/trapperkeeper ~trapperkeeper-version :classifier "test"]]
+                         [org.openvoxproject/trapperkeeper ~trapperkeeper-version :classifier "test"]
+                         [org.tcrawley/dynapath "1.1.0"]
+                         [ring/ring-core "1.15.3"]
+                         [prismatic/schema "1.4.1"]
+                         [slingshot "0.12.2"]]
 
   :dependencies [[org.clojure/clojure]
-                 [org.clojure/java.jmx "1.1.1"]
-                 [org.clojure/tools.logging "1.3.1"]
+                 [org.clojure/java.jmx]
+                 [org.clojure/tools.logging]
 
-                 [clj-commons/fs "1.6.312"]
-                 [prismatic/schema "1.4.1"]
-                 [slingshot "0.12.2"]
-                 [ring/ring-core "1.15.3"]
-
-                 [org.openvoxproject/jruby-deps "9.4.12.1-1"]
-
-                 [org.openvoxproject/i18n ~i18n-version]
+                 [clj-commons/fs]
+                 [org.openvoxproject/i18n]
+                 [org.openvoxproject/jruby-deps]
                  [org.openvoxproject/kitchensink]
+                 [org.openvoxproject/ring-middleware]
                  [org.openvoxproject/trapperkeeper]
-                 [org.openvoxproject/ring-middleware "2.1.2"]]
+                 [prismatic/schema]
+                 [ring/ring-core]
+                 [slingshot]]
 
   :deploy-repositories [["releases" {:url "https://clojars.org/repo"
                                      :username :env/CLOJARS_USERNAME
@@ -57,8 +66,8 @@
 
   :profiles {:dev {:dependencies  [[org.openvoxproject/kitchensink :classifier "test" :scope "test"]
                                    [org.openvoxproject/trapperkeeper :classifier "test" :scope "test"]
-                                   [org.bouncycastle/bcpkix-jdk18on "1.83"]
-                                   [org.tcrawley/dynapath "1.1.0"]]
+                                   [org.bouncycastle/bcpkix-jdk18on]
+                                   [org.tcrawley/dynapath]]
                    :jvm-opts ~(let [version (System/getProperty "java.specification.version")
                                     [major minor _] (clojure.string/split version #"\.")]
                                 (concat
