@@ -1,17 +1,16 @@
 (ns puppetlabs.services.jruby-pool-manager.impl.jruby-internal
-  (:require [clj-time.core :as time-core]
-            [clj-time.format :as time-format]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
             [clojure.java.jmx :as jmx]
             [clojure.string :refer [upper-case]]
             [clojure.tools.logging :as log]
-            [me.raynes.fs :as fs]
             [puppetlabs.i18n.core :as i18n]
             [puppetlabs.services.jruby-pool-manager.jruby-schemas :as jruby-schemas]
             [slingshot.slingshot :as sling]
             [schema.core :as schema])
   (:import (clojure.lang IFn)
            (com.puppetlabs.jruby_utils.pool JRubyPool ReferencePool)
+           (java.time ZonedDateTime ZoneOffset)
+           (java.time.format DateTimeFormatter)
            (com.puppetlabs.jruby_utils.jruby InternalScriptingContainer
                                              ScriptingContainer)
            (java.io File)
@@ -63,7 +62,8 @@
    profiler-output-file :- schema/Str
    profiling-mode :- schema/Keyword]
   (when (and profiler-output-file (not= :off profiling-mode))
-    (let [current-time-string (time-format/unparse (time-format/formatters :basic-date-time-no-ms) (time-core/now))
+    (let [current-time-string (.format (ZonedDateTime/now ZoneOffset/UTC)
+                                       (DateTimeFormatter/ofPattern "yyyyMMdd'T'HHmmssZ"))
           real-profiler-output-file (io/as-file (str profiler-output-file "-" (.hashCode jruby) "-" current-time-string))]
       (doto jruby
         (.setProfileOutput (ProfileOutput. ^File real-profiler-output-file))
