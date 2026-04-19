@@ -29,7 +29,7 @@
                          [org.openvoxproject/jruby-deps "9.4.12.1-3"]
                          [org.openvoxproject/kitchensink "3.5.6"]
                          [org.openvoxproject/kitchensink "3.5.6" :classifier "test"]
-                         [org.openvoxproject/ring-middleware "2.1.5"]
+                         [org.openvoxproject/ring-middleware "2.1.6"]
                          [org.openvoxproject/trapperkeeper "4.3.4"]
                          [org.openvoxproject/trapperkeeper "4.3.4" :classifier "test"]
                          [org.tcrawley/dynapath "1.1.0"]
