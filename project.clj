@@ -1,4 +1,4 @@
-(def i18n-version "1.0.3")
+(def i18n-version "1.0.4")
 
 (defproject org.openvoxproject/jruby-utils "5.3.8-SNAPSHOT"
   :description "A library for working with JRuby"
