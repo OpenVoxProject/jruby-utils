@@ -26,7 +26,7 @@
                          [commons-codec "1.22.0"]
                          [org.bouncycastle/bcpkix-jdk18on "1.84"]
                          [org.openvoxproject/i18n ~i18n-version]
-                         [org.openvoxproject/jruby-deps "9.4.12.1-3"]
+                         [org.openvoxproject/jruby-deps "9.4.14.0-2"]
                          [org.openvoxproject/kitchensink "3.5.7"]
                          [org.openvoxproject/kitchensink "3.5.7" :classifier "test"]
                          [org.openvoxproject/ring-middleware "2.1.7"]
