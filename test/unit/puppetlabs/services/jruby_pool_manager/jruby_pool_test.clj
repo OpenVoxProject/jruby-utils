@@ -364,3 +364,69 @@
            pill (ShutdownPoisonPill. pool)]
        ; Returning a pill should be a noop
        (jruby-core/return-to-pool pool-context pill :test [])))))
+
+(deftest flush-and-repopulate-interrupted-by-shutdown-test
+  (testing "flush-and-repopulate-pool! raises InterruptedException when racing with flush-pool-for-shutdown!"
+    (let [config (jruby-testutils/jruby-config {:max-active-instances 2})
+          ;; Set up pool manually to avoid double-shutdown from with-pool-context
+          pool-context (jruby-pool-manager-core/create-pool-context config)
+          _ (jruby-agents/prime-pool! pool-context)
+          _ (jruby-testutils/wait-for-jrubies-from-pool-context pool-context)
+          pool (jruby-core/get-pool pool-context)
+          ;; Borrow all instances to block both shutdown and flush from acquiring the lock
+          instances (jruby-testutils/drain-pool pool-context 2)
+          ;; Start shutdown: acquires pool lock immediately, then waits for both
+          ;; instances to be returned before proceeding
+          shutdown-complete? (promise)
+          _ (future
+              (jruby-core/flush-pool-for-shutdown! pool-context)
+              (deliver shutdown-complete? true))
+          ;; Wait for shutdown to hold the pool lock
+          _ (jruby-testutils/wait-for-pool-to-be-locked pool)
+          ;; Start flush: will block in lockWithTimeout waiting for the lock
+          flush-thread (future
+                         (try
+                           (pool-protocol/flush-pool pool-context)
+                           :ok
+                           (catch InterruptedException e
+                             e)))]
+      ;; Both should be blocked at this point
+      (is (not (realized? shutdown-complete?)))
+      (is (not (realized? flush-thread)))
+      ;; Returning instances unblocks shutdown, which drains the pool, releases the
+      ;; lock, then inserts the pill. The flush racing for the lock receives
+      ;; InterruptedException because the pill is inserted before or during its attempt.
+      (jruby-core/return-to-pool pool-context (first instances) :test [])
+      (jruby-core/return-to-pool pool-context (second instances) :test [])
+      @shutdown-complete?
+      (let [result @flush-thread]
+        (is (instance? InterruptedException result))
+        (is (= "Lock can't be granted because a pill has been inserted"
+               (.getMessage result)))))))
+
+(deftest flush-pool-for-shutdown-tolerates-existing-pill-test
+  (testing "flush-pool-for-shutdown! completes without throwing when the pool has already been poisoned"
+    (let [config (jruby-testutils/jruby-config {:max-active-instances 2})
+          ;; Set up pool manually since we poison the pool and shut it down here
+          pool-context (jruby-pool-manager-core/create-pool-context config)
+          _ (jruby-agents/prime-pool! pool-context)
+          _ (jruby-testutils/wait-for-jrubies-from-pool-context pool-context)
+          pool (jruby-core/get-pool pool-context)]
+      ;; Simulate an instance failing to initialize, which clears the pool and
+      ;; inserts a poison pill (see add-instance's error handler). A subsequent
+      ;; shutdown must not fail the stop sequence with an uncaught
+      ;; InterruptedException from the pill.
+      (jruby-internal/insert-poison-pill pool (IllegalStateException. "simulated init failure"))
+      (is (nil? (jruby-core/flush-pool-for-shutdown! pool-context))))))
+
+(deftest flush-pool-for-shutdown-is-idempotent-test
+  (testing "calling flush-pool-for-shutdown! a second time is a safe no-op"
+    (let [config (jruby-testutils/jruby-config {:max-active-instances 2})
+          ;; Set up pool manually so we control the (repeated) shutdown
+          pool-context (jruby-pool-manager-core/create-pool-context config)
+          _ (jruby-agents/prime-pool! pool-context)
+          _ (jruby-testutils/wait-for-jrubies-from-pool-context pool-context)]
+      ;; First shutdown drains the pool and inserts a shutdown pill
+      (is (nil? (jruby-core/flush-pool-for-shutdown! pool-context)))
+      ;; Second shutdown finds the pill already present and must not throw
+      (is (nil? (jruby-core/flush-pool-for-shutdown! pool-context))))))
