@@ -78,18 +78,22 @@
       ;; Lock the pool so no borrows or flushes can occur while we're shutting down
       (try
         (pool-protocol/lock-with-timeout pool-context flush-timeout TimeUnit/MILLISECONDS)
+        (try
+          (let [instance (.borrowItem pool)
+                _ (.releaseItem pool instance)]
+            ;; This will block until all borrows have been returned
+            (jruby-internal/cleanup-pool-instance! instance cleanup-fn))
+          ;; Insert a shutdown pill to ensure that all pending borrows and locks
+          ;; are rejected with the appropriate logging
+          (jruby-internal/insert-shutdown-poison-pill pool)
+          (finally
+            (pool-protocol/unlock pool-context)))
         (catch TimeoutException e
-          (jruby-internal/throw-jruby-lock-timeout e)))
-      (try
-        (let [instance (.borrowItem pool)
-              _ (.releaseItem pool instance)]
-          ;; This will block until all borrows have been returned
-          (jruby-internal/cleanup-pool-instance! instance cleanup-fn))
-        ;; Insert a shutdown pill to ensure that all pending borrows and locks
-        ;; are rejected with the appropriate logging
-        (jruby-internal/insert-shutdown-poison-pill pool)
-        (finally
-          (pool-protocol/unlock pool-context)))))
+          (jruby-internal/throw-jruby-lock-timeout e))
+        (catch InterruptedException _e
+          ;; A pill is already present; the pool is already shut down.
+          ;; Treat this as a completed no-op.
+          nil))))
 
   (lock
     [pool-context]
