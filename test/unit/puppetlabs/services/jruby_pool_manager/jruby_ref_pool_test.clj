@@ -238,3 +238,58 @@
       (is (thrown+? [:kind :puppetlabs.services.jruby-pool-manager.impl.jruby-internal/jruby-lock-timeout
                      :msg "An attempt to lock the JRubyPool failed with a timeout"]
                     (pool-protocol/shutdown pool-context))))))
+
+(deftest shutdown-is-idempotent-test
+  (testing "calling shutdown a second time is a safe no-op"
+    (let [config (jruby-test-config 0 2)
+          ;; Set up the pool manually, since we trigger shutdown directly here
+          ;; and the macro would also try to shutdown.
+          pool-context (jruby-pool-manager-core/create-pool-context config)
+          _ (jruby-agents/prime-pool! pool-context)
+          _ (jruby-testutils/wait-for-jrubies-from-pool-context pool-context)]
+      ;; First shutdown drains the instance and inserts a shutdown pill
+      (is (nil? (pool-protocol/shutdown pool-context)))
+      ;; Second shutdown finds the pill already present; lock-with-timeout
+      ;; throws InterruptedException, which must be absorbed rather than
+      ;; propagated out of the stop sequence.
+      (is (nil? (pool-protocol/shutdown pool-context))))))
+
+(deftest flush-if-at-max-borrows-interrupted-by-shutdown-test
+  (testing "InterruptedException from flush-if-at-max-borrows during shutdown propagates uncaught through the agent"
+    ;; A custom shutdown-on-error captures the exception that escapes from
+    ;; flush-if-at-max-borrows when it races with a concurrent shutdown.
+    (let [captured-exception (promise)
+          config (jruby-test-config
+                   1 1
+                   {:lifecycle {:shutdown-on-error (fn [f]
+                                                     (try (f)
+                                                          (catch InterruptedException e
+                                                            (deliver captured-exception e))))}})
+          ;; Set up pool manually to avoid double-shutdown from with-pool-context
+          pool-context (jruby-pool-manager-core/create-pool-context config)
+          _ (jruby-agents/prime-pool! pool-context)
+          _ (jruby-testutils/wait-for-jrubies-from-pool-context pool-context)
+          pool (jruby-core/get-pool pool-context)
+          ;; Borrow the instance to prevent shutdown from proceeding immediately
+          instance (first (pool-protocol/borrow pool-context))
+          ;; Start shutdown: acquires pool lock, then waits for borrow count to drop to zero
+          shutdown-complete? (promise)
+          _ (future
+              (pool-protocol/shutdown pool-context)
+              (deliver shutdown-complete? true))]
+      ;; Wait for shutdown to hold the pool lock
+      (is (jruby-testutils/wait-for-pool-to-be-locked pool))
+      ;; Returning the instance simultaneously unblocks shutdown (currentBorrowCount
+      ;; drops to 0) and triggers flush-if-at-max-borrows to be sent to the agent
+      ;; (borrow-count atom crosses max-borrows-per-instance). Shutdown inserts its
+      ;; pill while flush-if-at-max-borrows is waiting to acquire the lock, causing
+      ;; an InterruptedException to propagate through the agent's shutdown-on-error.
+      (pool-protocol/return pool-context instance)
+      @shutdown-complete?
+      (let [err (deref captured-exception 5000 nil)]
+        (is (some? err) "expected InterruptedException from flush-if-at-max-borrows")
+        (when err
+          (is (instance? InterruptedException err))
+          (is (= "Lock can't be granted because a pill has been inserted"
+                 (.getMessage err))))))))
+

@@ -233,10 +233,19 @@
   (let [pool-state (jruby-internal/get-pool-state pool-context)
         pool (:pool pool-state)
         on-complete (promise)]
-    (drain-and-refill-pool! pool-context false on-complete)
-    (jruby-internal/insert-shutdown-poison-pill pool)
-    ; Wait for flush to complete
-    @on-complete
+    (try
+      (drain-and-refill-pool! pool-context false on-complete)
+      (jruby-internal/insert-shutdown-poison-pill pool)
+      ; Wait for flush to complete
+      @on-complete
+      (catch InterruptedException _e
+        ;; A poison pill is already present: either this pool was already shut
+        ;; down, or an instance failed to initialize and poisoned the pool
+        ;; while we were draining. Either way the pool is already unusable, so
+        ;; ensure a shutdown pill is in place and treat this as a completed
+        ;; (no-op) shutdown rather than failing the stop sequence.
+        (jruby-internal/insert-shutdown-poison-pill pool)
+        (log/debug (i18n/trs "JRuby pool already shut down or poisoned; skipping flush"))))
     (log/debug (i18n/trs "Finished flush of JRuby pools for shutdown"))))
 
 (schema/defn ^:always-validate
