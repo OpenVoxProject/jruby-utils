@@ -3,9 +3,11 @@
   "addLabels": ["renovate", "dependencies"],
   "assigneesFromCodeOwners": true,
   "automerge": true,
+  "automergeStrategy": "merge-commit",
   "automergeType": "pr",
   "dependencyDashboard": true,
   "enabledManagers": ["leiningen"],
+  "platformAutomerge": true,
 
   "packageRules": [
     // Lock jruby-deps to the 9.4 release series. Moving to 10.0 will
