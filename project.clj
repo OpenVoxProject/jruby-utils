@@ -1,6 +1,6 @@
 (def i18n-version "1.0.4")
 
-(defproject org.openvoxproject/jruby-utils "5.4.2-SNAPSHOT"
+(defproject org.openvoxproject/jruby-utils "5.5.0-SNAPSHOT"
   :description "A library for working with JRuby"
   :url "https://github.com/openvoxproject/jruby-utils"
   :license {:name "Apache License, Version 2.0"
@@ -26,7 +26,7 @@
                          [commons-codec "1.22.0"]
                          [org.bouncycastle/bcpkix-jdk18on "1.84"]
                          [org.openvoxproject/i18n ~i18n-version]
-                         [org.openvoxproject/jruby-deps "9.4.12.1-3"]
+                         [org.openvoxproject/jruby-deps "9.4.15.0-1"]
                          [org.openvoxproject/kitchensink "3.5.7"]
                          [org.openvoxproject/kitchensink "3.5.7" :classifier "test"]
                          [org.openvoxproject/ring-middleware "2.2.0"]
