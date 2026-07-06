@@ -102,6 +102,9 @@
     (set-ruby-encoding KCode/UTF8 jruby)
     (setup-profiling jruby profiler-output-file profiling-mode)
     (System/setProperty "jruby.invokedynamic.yield" "false")
+    ;; This fixes a memory leak introduced in JRuby 9.4.13.0 and fixed
+    ;; in 10.0.5.0.
+    (System/setProperty "jruby.ji.class.values" "HARD_MAP")
     (initialize-scripting-container-fn jruby config)))
 
 (schema/defn ^:always-validate empty-scripting-container :- ScriptingContainer
