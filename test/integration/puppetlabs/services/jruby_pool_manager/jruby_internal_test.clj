@@ -9,7 +9,7 @@
             [me.raynes.fs :as fs])
   (:import (java.io StringReader)
            (com.puppetlabs.jruby_utils.pool JRubyPool)
-           (org.jruby RubyInstanceConfig$CompileMode CompatVersion RubyInstanceConfig$ProfilingMode)
+           (org.jruby RubyInstanceConfig$CompileMode RubyInstanceConfig$ProfilingMode)
            (org.jruby.util.cli Options)
            (clojure.lang ExceptionInfo)))
 

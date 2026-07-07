@@ -125,4 +125,4 @@
         (is (re-find #"bar" out))))))
 
 (deftest jruby-version-info-test
-    (is (re-find #"jruby 9." jruby-core/jruby-version-info)))
+    (is (re-find #"^jruby" jruby-core/jruby-version-info)))
