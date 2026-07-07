@@ -1,8 +1,6 @@
 package com.puppetlabs.jruby_utils.jruby;
 
-import org.jruby.embed.EmbedEvalUnit;
 import org.jruby.embed.EmbedRubyInstanceConfigAdapter;
-import org.jruby.runtime.Block;
 
 /**
  */
