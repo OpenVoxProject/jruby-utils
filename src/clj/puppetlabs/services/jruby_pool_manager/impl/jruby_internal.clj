@@ -15,7 +15,7 @@
                                              ScriptingContainer)
            (java.io File)
            (java.util.concurrent TimeUnit Executors ExecutorService)
-           (org.jruby CompatVersion Main Ruby RubyInstanceConfig RubyInstanceConfig$CompileMode RubyInstanceConfig$ProfilingMode)
+           (org.jruby Main Ruby RubyInstanceConfig RubyInstanceConfig$CompileMode RubyInstanceConfig$ProfilingMode)
            (org.jruby.embed LocalContextScope)
            (org.jruby.runtime.profile.builtin ProfileOutput)
            (org.jruby.util KCode)
