@@ -15,7 +15,7 @@
        ;; but are not expected to be set in most environments. However, in
        ;; order to make this more test robust, these variables are always
        ;; filtered out.
-       (is (= #{"HOME" "PATH" "GEM_HOME" "JARS_NO_REQUIRE" "JARS_REQUIRE" "RUBY"}
+       (is (= #{"HOME" "PATH" "GEM_HOME" "GEM_PATH" "JARS_NO_REQUIRE" "JARS_REQUIRE" "RUBY"}
               (set (remove (set jruby-core/proxy-vars-allowed-list) (keys jruby-env)))))))))
 
 (deftest jruby-configured-env-vars
@@ -28,6 +28,6 @@
        ;; but are not expected to be set in most environments. However, in
        ;; order to make this test more robust, these variables are always
        ;; filtered out.
-       (is (= #{"HOME" "PATH" "GEM_HOME" "JARS_NO_REQUIRE" "JARS_REQUIRE" "FOO" "RUBY"}
+       (is (= #{"HOME" "PATH" "GEM_HOME" "GEM_PATH" "JARS_NO_REQUIRE" "JARS_REQUIRE" "FOO" "RUBY"}
               (set (remove (set jruby-core/proxy-vars-allowed-list) (keys jruby-env)))))
        (is (= (.get jruby-env "FOO") "for_jruby"))))))

@@ -24,6 +24,11 @@
    9k."
     :jit)
 
+(def jruby-bundled-gems
+  "The gem repository inside jruby-stdlib.jar. Contains the 'bundled' gems
+  that are part of the Ruby Standard Library."
+  "uri:classloader:/META-INF/jruby.home/lib/ruby/gems/shared")
+
 (def default-borrow-timeout
   "Default timeout when borrowing instances from the JRuby pool in
    milliseconds. Current value is 1200000ms, or 20 minutes."
@@ -92,8 +97,8 @@
   [env :- {schema/Str schema/Str}
    config :- jruby-schemas/JRubyConfig]
   (if-let [gem-path (:gem-path config)]
-    (assoc env "GEM_PATH" gem-path)
-    env))
+    (assoc env "GEM_PATH" (str gem-path ":" jruby-bundled-gems))
+    (assoc env "GEM_PATH" jruby-bundled-gems)))
 
 (def proxy-vars-allowed-list
   "A list of proxy-related variables that are allowed to be passed the environment"
