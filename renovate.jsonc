@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "baseBranchPatterns": ["main", "5.x"],
+  "baseBranchPatterns": ["main", "6\\.x", "5\\.x"],
   "addLabels": ["renovate", "dependencies"],
   "assigneesFromCodeOwners": true,
   "automerge": true,
@@ -11,10 +11,20 @@
   "platformAutomerge": true,
 
   "packageRules": [
-    // Lock JRuby to the 10.0 release series for the main branch.
+    // Lock JRuby to the 10.1 release series for the main branch.
+    {
+      "groupName": "jruby updates",
+      "allowedVersions": "<10.2",
+      "matchBaseBranches": ["main"],
+      "matchPackageNames": [
+        "org.openvoxproject:jruby-deps"
+      ]
+    },
+    // Lock JRuby to the 10.0 release series for the 6.x branch.
     {
       "groupName": "jruby updates",
       "allowedVersions": "<10.1",
+      "matchBaseBranches": ["6.x"],
       "matchPackageNames": [
         "org.openvoxproject:jruby-deps"
       ]
@@ -24,7 +34,7 @@
     {
       "groupName": "jruby updates",
       "allowedVersions": "<10.0",
-      "matchBaseBranches": "5.x",
+      "matchBaseBranches": ["5.x"],
       "matchPackageNames": [
         "org.openvoxproject:jruby-deps"
       ]
