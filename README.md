@@ -3,6 +3,12 @@
 A library for creating and interacting with a pool of JRuby instances in
 Clojure.
 
+## Branching
+
+* The [6.x](https://github.com/OpenVoxProject/jruby-utils/tree/6.x) branch uses JRuby 10.0.6 - MRI 3.4 compatible (OpenVox Server 9 beta packages)
+* The [5.x](https://github.com/OpenVoxProject/jruby-utils/tree/5.x) branch uses JRuby 9.4 - MRI 3.1 compatible (OpenVox Server 8)
+* The [4.x](https://github.com/OpenVoxProject/jruby-utils/tree/4.x) branch uses JRuby 9.3 - MRI 2.6 compatible (OpenVox Server 7)
+
 ## Usage
 
 This is a brief overview of the functionality of this library; TODO add more docs.
