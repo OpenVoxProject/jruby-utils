@@ -1,5 +1,9 @@
 (ns puppetlabs.services.jruby-pool-manager.jruby-schemas
-  (:require [schema.core :as schema])
+  (:require [schema.core :as schema]
+            ;; Side-effect: sets defaults in Java properties before JRuby
+            ;; classes are loaded and static initializers make decisions
+            ;; based on properties.
+            [openvox.jruby_utils.jruby_defaults])
   (:import (clojure.lang Atom Agent IFn PersistentArrayMap PersistentHashMap)
            (com.puppetlabs.jruby_utils.jruby ScriptingContainer)
            (com.puppetlabs.jruby_utils.pool LockablePool)
