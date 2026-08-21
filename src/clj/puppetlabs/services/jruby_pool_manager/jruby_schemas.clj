@@ -61,7 +61,7 @@
     * :gem-path - The full path where JRuby should look for gems
 
     * :compile-mode - The value to use for JRuby's CompileMode setting.  Legal
-        values are `:jit`, `:force`, and `:off`.  Defaults to `:off`.
+        values are `:jit`, `:force`, and `:off`.  Defaults to `:jit`.
 
     * :max-active-instances - The maximum number of JRubyInstances that
         will be pooled.
