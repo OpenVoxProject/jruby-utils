@@ -24,7 +24,7 @@
                          [clj-commons/fs "1.6.312"]
                          [commons-io "2.22.0"]
                          [commons-codec "1.22.0"]
-                         [org.bouncycastle/bcpkix-jdk18on "1.84"]
+                         [org.bouncycastle/bcpkix-jdk18on "1.85"]
                          [org.openvoxproject/i18n ~i18n-version]
                          [org.openvoxproject/jruby-deps "9.4.15.0-1"]
                          [org.openvoxproject/kitchensink "3.5.7"]
