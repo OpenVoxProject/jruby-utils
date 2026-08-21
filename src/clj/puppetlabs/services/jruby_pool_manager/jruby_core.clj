@@ -20,8 +20,9 @@
 ;;; Constants
 
 (def default-jruby-compile-mode
-  "Default for JRuby's CompileMode setting. Defaults to JIT for Jruby
-   9k."
+  "Default for JRuby's CompileMode setting. Controls whether interpreted
+   Ruby code is compiled to JVM bytecode, which is then compiled to native
+   code."
     :jit)
 
 (def jruby-bundled-gems
