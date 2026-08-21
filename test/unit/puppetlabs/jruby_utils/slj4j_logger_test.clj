@@ -1,13 +1,31 @@
 (ns puppetlabs.jruby-utils.slj4j-logger-test
   (:require [clojure.test :refer :all]
-            [puppetlabs.trapperkeeper.testutils.logging :as logutils])
-  (:import (org.jruby.util.log LoggerFactory)))
+            [openvox.jruby-utils.jruby-testutils :as testutils]
+            [puppetlabs.trapperkeeper.testutils.logging :as logutils]
+            [openvox.jruby-utils.jruby-defaults :as jruby-defaults])
+  (:import (clojure.lang Reflector)))
+
+;; Populates *loader* variable. org.slf4j.* is delegated to the system
+;; classloader so log events reach the same LoggerContext with-test-logging
+;; attaches its capture appender to.
+(use-fixtures :each
+  (testutils/with-restored-system-properties "jruby.logger.class")
+  (testutils/with-isolated-classloader "org.slf4j."))
+
+(defn get-logger
+  "Loads JRuby's LoggerFactory inside of an isolated classloader and returns
+  a root Logger instance from it. The isolation is required to test the effects
+  of settings that are read by static field initializers run when the LoggerFactory
+  class is loaded for the first time."
+  [classloader logger-name]
+  (-> (.loadClass classloader "org.jruby.util.log.LoggerFactory")
+      (Reflector/invokeStaticMethod "getLogger" (into-array Object [logger-name]))))
 
 (deftest slf4j-logger-test
   (let [actual-logger-name "my-test-logger"
         exception-message "exceptionally bad news"
         expected-logger-name (str "jruby." actual-logger-name)
-        logger (LoggerFactory/getLogger actual-logger-name)
+        logger (get-logger testutils/*loader* actual-logger-name)
         actual-log-event (fn [event]
                            (assoc event :exception
                                         (when-let [exception (:exception event)]
@@ -91,3 +109,35 @@
        (is (logged?
             #(= (expected-log-event "some debug" :debug exception-message)
                 (actual-log-event %))))))))
+
+(deftest logger-class-is-explicitly-settable
+  (testing "The logger class can be explicitly set via Java properties."
+    (System/setProperty "jruby.logger.class" "org.jruby.util.log.StandardErrorLogger")
+    (jruby-defaults/set-jruby-property-defaults!)
+    (is (= "org.jruby.util.log.StandardErrorLogger"
+           (-> (get-logger testutils/*loader* "test")
+                 (.getClass)
+                 (.getName))))))
+
+(deftest logger-class-defaults-to-slf4j
+  (testing "The logger class can be explicitly set via Java properties."
+    (System/clearProperty "jruby.logger.class")
+    (jruby-defaults/set-jruby-property-defaults!)
+    (is (= "com.puppetlabs.jruby_utils.jruby.Slf4jLogger"
+           (-> (get-logger testutils/*loader* "test")
+                 (.getClass)
+                 (.getName))))))
+
+(deftest logger-class-defaults-to-no-debug
+  (testing "Debug behavor for the SLF4J logger defaults to off."
+    (System/clearProperty "jruby.logger.class")
+    (jruby-defaults/set-jruby-property-defaults!)
+    (is (false? (.isDebugEnabled (get-logger testutils/*loader* "test"))))))
+
+(deftest logger-class-enables-debug-when-requested
+  (testing "Debug behavor for the SLF4J logger is enabled when requested."
+    (System/clearProperty "jruby.logger.class")
+    (jruby-defaults/set-jruby-property-defaults!)
+    (let [logger (get-logger testutils/*loader* "test")]
+      (.setDebugEnable logger true)
+      (is (true? (.isDebugEnabled logger))))))
