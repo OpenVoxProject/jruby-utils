@@ -34,7 +34,7 @@
                          [org.openvoxproject/trapperkeeper "5.0.4" :classifier "test"]
                          [org.tcrawley/dynapath "1.1.0"]
                          [ring/ring-core "1.15.5"]
-                         [prismatic/schema "1.4.1"]
+                         [prismatic/schema "1.4.2"]
                          [slingshot "0.12.2"]]
 
   :dependencies [[org.clojure/clojure]
