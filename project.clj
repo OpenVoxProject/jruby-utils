@@ -1,6 +1,6 @@
 (def i18n-version "1.0.5")
 
-(defproject org.openvoxproject/jruby-utils "7.0.3"
+(defproject org.openvoxproject/jruby-utils "7.0.4-SNAPSHOT"
   :description "A library for working with JRuby"
   :url "https://github.com/openvoxproject/jruby-utils"
   :license {:name "Apache License, Version 2.0"
