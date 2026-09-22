@@ -7,12 +7,22 @@ permissions:
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'The branch to release from. 5.x is for OpenVox 8. 6.x is JRuby 10.0 and currently not used'
+        type: choice
+        options:
+          - main
+          - '5.x'
+          - '6.x'
+        default: 'main'
 
 jobs:
   release:
     uses: 'openvoxproject/shared-actions/.github/workflows/clojure_release.yml@main'
     with:
-      java-version: '21'
+      java-version: ${{ case(inputs.branch == '5.x', '17', '21') }}
+      base-branch: ${{ inputs.branch }}
     secrets:
       github_pat: ${{ secrets.OPENVOXBOT_COMMIT_AND_PRS }}
       ssh_private_key: ${{ secrets.OPENVOXBOT_SSH_PRIVATE_KEY }}
