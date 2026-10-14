@@ -1,0 +1,30 @@
+---
+name: 'Prepare Release'
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to be released (e.g., 7.0.5)'
+        required: true
+        type: string
+      branch:
+        description: 'The branch to release from. 5.x is for OpenVox 8. 6.x is JRuby 10.0 and currently not used'
+        type: choice
+        options:
+          - main
+          - '5.x'
+          - '6.x'
+        default: 'main'
+
+permissions: {}
+
+jobs:
+  prepare_release:
+    uses: 'openvoxproject/shared-actions/.github/workflows/prepare_release.yml@main'
+    with:
+      version: ${{ inputs.version }}
+      base-branch: ${{ inputs.branch }}
+    secrets:
+      github_pat: ${{ secrets.OPENVOXBOT_COMMIT_AND_PRS }}
+      ssh_private_key: ${{ secrets.OPENVOXBOT_SSH_PRIVATE_KEY }}
