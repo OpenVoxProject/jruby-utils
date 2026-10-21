@@ -33,7 +33,7 @@
                          [org.openvoxproject/trapperkeeper "5.0.6"]
                          [org.openvoxproject/trapperkeeper "5.0.6" :classifier "test"]
                          [org.tcrawley/dynapath "1.1.0"]
-                         [ring/ring-core "1.15.5"]
+                         [ring/ring-core "1.15.6"]
                          [prismatic/schema "1.4.2"]
                          [slingshot "0.12.2"]]
 
